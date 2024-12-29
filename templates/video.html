@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block head %}
+<script>
+    let isfull = false;
+    let isplay = false;
+    addEventListener("keypress", (e) => {
+        if (e.key == "f") {
+            if (isfull) {
+                closeFullscreen();
+            } else {
+                openFullscreen();
+            }
+            isfull = !isfull;
+        }
+    });
+    addEventListener("keypress", (e) => {
+        if (e.key == " ") {
+            let elem = document.getElementById("video");
+            if (isplay) {
+                elem.pause();
+            }else {
+                elem.play();
+            }
+            isplay = !isplay;
+        }
+    });
+    addEventListener("keydown", (e) => {
+        if (e.key == "ArrowRight") {
+            let elem = document.getElementById("video");
+            elem.currentTime += 5
+        }
+    });
+    addEventListener("keydown", (e) => {
+        if (e.key == "ArrowLeft") {
+            let elem = document.getElementById("video");
+            elem.currentTime -= 5
+        }
+    });
+    function openFullscreen() {
+        let elem = document.getElementById("video");
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) { /* Safari */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen();
+        }
+    }
+    function closeFullscreen() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { /* Safari */
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE11 */
+            document.msExitFullscreen();
+        }
+    }
+</script>
+{% endblock %}
+{% block content %}
+<div class="container text-center">
+    <video name="{{i}}" src="{{url_for('getVideo', i=i)}}" style="max-width: 80vw;max-height: 80vh;" controls
+        id="video"></video>
+    <h2 class="text-start">{{title}}<span style="font-size: small;"
+            onclick="let myHeaders = new Headers({'Content-Type': 'application/json',});r = prompt('change name to? (blank to cancel)');if (r != '') {fetch('/updateName/', { method: 'POST',headers: myHeaders, body: JSON.stringify({ id: document.getElementById('video').getAttribute('name'), name: r }) }).then((res) => res.json()).then((r) => {if (r == true) {alert('success');location.reload()} else {alert('failed');}});}">🖊️</span>
+    </h2>
+</div>
+{% endblock %}
