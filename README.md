@@ -13,4 +13,6 @@ then you can start setting up the system
 1. choose a directory you like.
 2. `git clone` (or download zip and extract)
 3. open the command line (or whatever you like to call) and run `pip install -r requirements.txt` or `pip3 install -r requirements.txt`
-4. run `fastapi run main.py`
+4. create two directory, one named `video` and one named `thumbnail`
+5. run `fastapi run main.py`
+6. you're good to go, open [localhost:8000](localhost:8000) to use the system.
