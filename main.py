@@ -1,10 +1,11 @@
 import fastapi
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse,FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from tools import thumb,data,getvideo
+from typing import Annotated
 
 
 
@@ -21,10 +22,16 @@ async def home(request: Request):
     return templates.TemplateResponse(
         request=request, name="home.html",context={"content":videos,"length":len(videos)})
 
+@app.get("/search")
+async def login(request:Request, query: str):
+    videos = getvideo.search(query)
+    return templates.TemplateResponse(
+        request=request, name="home.html",context={"content":videos,"length":len(videos)})
+
 @app.get("/video/{i}")
 async def video_page(request: Request,i:str):
     return templates.TemplateResponse(
-        request=request, name="video.html",context={"i":i,"title":data.get(i)["name"]})
+        request=request, name="video.html",context={"i":i,"title":data.get(i)["name"]}) # type: ignore
 
 
 @app.get("/bootstrap.js")
